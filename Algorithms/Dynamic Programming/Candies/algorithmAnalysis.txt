@@ -1,0 +1,56 @@
+Algorithm:
+
+- create and initialize ratings array with proper values. 
+- give every child ONE piece of candy. 
+	-(initialize each element of candies array to 1)
+- for each child 'i' with rating greater than child 'i-1'  ----> Loop 1
+	-give child 'i' one more piece of candy
+	
+- for each child 'i' with rating greater than child 'i+1'  ------> Loop 2
+	- give child 'i' the greater of
+			1. the number of candies child 'i' has
+			2. the number of candies child 'i+1' has plus one more piece of candy
+			
+- sum up the values in the candies array to get minimum number of candies needed
+
+
+Proof: 
+
+Each child must have at least one piece of candy. This is handled by initializing every element in the child array to 1. Since we never remove pieces of candies from any child, it is guaranteed by the initial initialization that every child gets at least one piece of candy. 
+
+Loop 1 guarantees that every child 'i' with a rating higher than its left neighbor (child 'i-1') has more pieces of candies as specified by the problem statement. 
+
+Loop 2 guarantees that every child 'i' with a rating higher than its right neighbor (child 'i+1') has more pieces of candies as specified by the problem statement.
+
+So, the combined steps ensure that every child 'i' has an appropriate number of candies based on the ratings of its left and right neighbors.
+
+The following will prove that Loop 2 does not interfere with the correctness introduced by Loop 1:
+
+When traversing through loop 2, we encounter 3 possibilities that could possibly change Loop 1 values:
+
+		Case 1: rating[j - 1] < rating[j] > rating[j+1]
+		Case 2: rating[j - 1] > rating[j] > rating[j+1]
+		Case 3: rating[j - 1] = rating[j] > rating[j+1]
+		
+Consider Case 3: 		rating[j - 1] = rating[j] > rating[j + 1]
+
+	From Loop 1 we only give an additional piece of candy to a child when (ratings[j] > ratings[j-1]) which is never present in this case for rating[j]. In Loop 2 we modify the pieces of candies only to child[j]. Either child[j] has the same number of candies after a pass from Loop 1 or is incremented based on number of candies from child[j+1]. If number of candies for child[j] stay the same then Loop 1 property will still hold. If number of candies for child[j] increases then Loop 1 property is still maintained since child[j] has same rating as child[j-1] and children with same ratings are allowed to have a different amount of candies. The right-neighbor property from Loop 2 clearly holds. Thus in this case, Loop 2 does not interfere with the property set by Loop 1.
+	
+Consider Case 1:       rating[j - 1] < rating[j] > rating[j + 1]
+
+ 	From Loop 1 pass we have that the number of candies for child [j]  is greater than child[j-1]. Once again we either increase number of candies for child [j] or keep the same count. In both cases the property of Loop 1 will hold as child[j] which has a greater rating will continue to have more pieces of candies than child[j-1]. The right-neighbor property from Loop 2 clearly holds. Thus in this case, Loop 2 does not interfere with the property set by Loop 1. 
+
+Consider Case 2:	   rating[j - 1] > rating[j] > rating[j+1]
+
+	From Loop 1 pass we do not change the number of candies for child[j]. So child[j] either has the same number of candies as child[j-1] or less pieces of candies. On our Loop 2 pass we either increment number of candies for child[j] or keep the pieces at the same count. In either case, on the next pass when analyzing child[j-1], the number of candies for child[j-1] will be at a higher count than child[j]. And since no change to child[j] was done on the 1st pass, the property of Loop 1 will hold. The right-neighbor property from Loop 2 clearly holds. Thus in this case, Loop 2 does not interfere with the property set by Loop 1.
+	
+Thus, in all 3 cases the property by Loop 1 and Loop 2 hold. Therefore, every child is given an appropriate number of candies based on the rating of their left and right neighbor. 
+
+
+Running time:
+	Each for loop runs approximately N times. Work done inside each for loop is constant (O(1)). Therefore the running time for this algorithm is O(N).
+
+
+	
+		
+		
